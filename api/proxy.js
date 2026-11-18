@@ -1,14 +1,13 @@
 export const config = {
   runtime: 'edge',
-  // 強制鎖定在美國華盛頓機房執行，確保出口 IP 100% 為美國
   regions: ['iad1'],
 };
 
 export default async function handler(req) {
   const url = new URL(req.url);
 
-  // 將 /api/proxy 路徑還原為乾淨的 Google API 路徑，並保留 ?key=... 參數
-  const pathname = url.pathname.replace(/^\/api\/proxy/, '');
+  // 移除開頭的 /api 前綴，還原為乾淨的 /v1beta/... 路徑並保留 ?key=... 參數
+  const pathname = url.pathname.replace(/^\/api/, '');
   const targetUrl = `https://generativelanguage.googleapis.com${pathname}${url.search}`;
 
   const headers = new Headers(req.headers);
