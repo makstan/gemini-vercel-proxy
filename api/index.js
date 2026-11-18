@@ -6,9 +6,8 @@ export const config = {
 export default async function handler(req) {
   const url = new URL(req.url);
 
-  // 移除開頭的 /api 前綴，還原為乾淨的 /v1beta/... 路徑並保留 ?key=... 參數
-  const pathname = url.pathname.replace(/^\/api/, '');
-  const targetUrl = `https://generativelanguage.googleapis.com${pathname}${url.search}`;
+  // Rewrite 模式下，url.pathname 會完整保留原始請求路徑（例如 / 或 /v1beta/models/...）
+  const targetUrl = `https://generativelanguage.googleapis.com${url.pathname}${url.search}`;
 
   const headers = new Headers(req.headers);
   headers.set('Host', 'generativelanguage.googleapis.com');
